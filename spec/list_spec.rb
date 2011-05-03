@@ -30,7 +30,7 @@ describe Pomo::List do
     @list.save
     @list = Pomo::List.new(@path)
     @list.load # not specifically needed, called upon initialization
-    @list.tasks.first.should == 'Task 0'
+    @list.tasks.first.name.should == 'Task 0'
   end
 
   it "can find all tasks" do
@@ -76,6 +76,43 @@ describe Pomo::List do
     @list.find('3..4') do |task, i|
       task.name.should == names.shift
     end
+  end
+
+  it "can move a task's position from first to last" do
+    @list.move('first', 'last')
+    @list.tasks.first.name.should == 'Task 1'
+    @list.tasks.last.name.should == 'Task 0'
+  end
+
+  it "can move a task's position from last to first" do
+    @list.move('last', 'first')
+    @list.tasks.first.name.should == 'Task 4'
+    @list.tasks.last.name.should == 'Task 3'
+  end
+
+  it "can move a task's position with numbers forwards" do
+    @list.move('1', '3')
+    @list.tasks[0].name.should == 'Task 0'
+    @list.tasks[1].name.should == 'Task 2'
+    @list.tasks[2].name.should == 'Task 3'
+    @list.tasks[3].name.should == 'Task 1'
+    @list.tasks[4].name.should == 'Task 4'
+  end
+
+  it "can move a task's position with numbers backwards" do
+    @list.move('3', '1')
+    @list.tasks[0].name.should == 'Task 0'
+    @list.tasks[1].name.should == 'Task 3'
+    @list.tasks[2].name.should == 'Task 1'
+    @list.tasks[3].name.should == 'Task 2'
+    @list.tasks[4].name.should == 'Task 4'
+  end
+
+  it "uses equivalent of 'last' for all arguments larger than size of task list" do
+    @list.move('first', '100')
+    @list.tasks.first.name.should == 'Task 1'
+    @list.tasks[4].name.should == 'Task 0'
+    @list.tasks.size.should == 5
   end
 end
 
