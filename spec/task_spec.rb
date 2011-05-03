@@ -32,9 +32,5 @@ describe Pomo::Task do
     @task.complete = true
     @task.should be_complete
   end
-
-  it "can be started" do
-    pending 'not sure how to spec the progress bar'
-  end
 end
 
