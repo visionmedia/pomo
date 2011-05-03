@@ -237,3 +237,17 @@ command :list do |c|
   end
 end
 
+command :move do |c|
+  c.syntax = 'pomo move [from] [to]'
+  c.description = 'Move a task to a different position'
+  c.example 'Move task 4 to position 2', 'pomo move 4 2'
+  c.example 'Move last task to first position', 'pomo move last first'
+  c.action do |args|
+    list.find(args[0]) do |task, i|
+      list.move(args[0], args[1])
+      say "  - moved #{task} from position #{args[0]} to #{args[1]}" 
+    end
+    list.save
+  end
+end
+
