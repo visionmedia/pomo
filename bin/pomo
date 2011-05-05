@@ -251,3 +251,18 @@ command :move do |c|
   end
 end
 
+command :duplicate do |c|
+  c.syntax = 'pomo duplicate [task]'
+  c.summary = 'Duplicate a task'
+  c.description = 'Duplicate a task, adding the duplicated task to the end of the list'
+  c.example 'Duplicate the first task', 'pomo duplicate first'
+  c.example 'Duplicate task 4', 'pomo duplicate 4'
+  c.action do |args|
+    list.find(args[0]) do |task, i|
+      list.add(task) 
+      say "  - duplicated #{task}"
+    end
+    list.save
+  end
+end
+
