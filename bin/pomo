@@ -257,10 +257,15 @@ command :duplicate do |c|
   c.description = 'Duplicate a task, adding the duplicated task to the end of the list'
   c.example 'Duplicate the first task', 'pomo duplicate first'
   c.example 'Duplicate task 4', 'pomo duplicate 4'
-  c.action do |args|
+  c.example 'Duplicate the last task 5 times', 'pomo duplicate last -n 5'
+  c.option '-n', '--number times', Integer, 'Duplicate a number times'
+  c.action do |args, options|
+    options.default :number => 1
     list.find(args[0]) do |task, i|
-      list.add(task) 
-      say "  - duplicated #{task}"
+      options.number.times do
+        list.add(task.dup) 
+        say "  - duplicated #{task}"
+      end
     end
     list.save
   end
