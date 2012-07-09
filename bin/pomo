@@ -237,3 +237,37 @@ command :list do |c|
   end
 end
 
+command :move do |c|
+  c.syntax = 'pomo move [from] [to]'
+  c.description = 'Move a task to a different position'
+  c.example 'Move task 4 to position 2', 'pomo move 4 2'
+  c.example 'Move last task to first position', 'pomo move last first'
+  c.action do |args|
+    list.find(args[0]) do |task, i|
+      list.move(args[0], args[1])
+      say "  - moved #{task} from position #{args[0]} to #{args[1]}" 
+    end
+    list.save
+  end
+end
+
+command :duplicate do |c|
+  c.syntax = 'pomo duplicate [task]'
+  c.summary = 'Duplicate a task'
+  c.description = 'Duplicate a task, adding the duplicated task to the end of the list'
+  c.example 'Duplicate the first task', 'pomo duplicate first'
+  c.example 'Duplicate task 4', 'pomo duplicate 4'
+  c.example 'Duplicate the last task 5 times', 'pomo duplicate last -n 5'
+  c.option '-n', '--number times', Integer, 'Duplicate a number times'
+  c.action do |args, options|
+    options.default :number => 1
+    list.find(args[0]) do |task, i|
+      options.number.times do
+        list.add(task.dup) 
+        say "  - duplicated #{task}"
+      end
+    end
+    list.save
+  end
+end
+

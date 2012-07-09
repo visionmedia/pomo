@@ -69,6 +69,19 @@ module Pomo
       @tasks << task
     end
     alias :<< :add
+
+    ##
+    ## Move task at _from_ position to new _to_ position (requres saving).
+
+    def move from, to
+      list = Array.new(@tasks.size)
+      list[position(to)] = @tasks[position(from)]
+      @tasks.each_with_index do |task, index|
+        next if index == position(from)
+        list[list.find_index(nil)] = task
+      end
+      @tasks = list
+    end
     
     ##
     # Save the list.
@@ -87,6 +100,17 @@ module Pomo
       @tasks = YAML.load_file path
       self
     end
-    
+
+    ## 
+    # Determine position from argument.
+
+    def position arg
+      return case arg.downcase
+        when 'first' then 0
+        when 'last' then @tasks.size-1
+        else arg.to_i > @tasks.size-1 ? @tasks.size-1 : arg.to_i
+        end
+    end
+    private :position
   end
 end
