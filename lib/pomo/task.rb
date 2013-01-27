@@ -163,8 +163,7 @@ module Pomo
       end
       Process.detach(pid)
     end
-
-    private
+    
     def notify_of_time_periods(remaining)
       if remaining == length / 2
         notifier.notify 'Half way there!', :header => "#{remaining} minutes remaining"
@@ -192,6 +191,12 @@ module Pomo
         when 6..100
           "#[default]#[fg=green]#{time}:00#[default]"
         end
+    end
+
+    def write_pomodoro_stat
+      File.open(path, 'w') do |file|
+        file.write tmux_time(time)
+      end
     end
   end
 end
