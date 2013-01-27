@@ -101,15 +101,8 @@ module Pomo
         :format => format_message,
         :tokens => { :remaining => length },
         :complete_message => complete_message
-      ) do |remaining|
-        if remaining == length / 2
-          notifier.notify 'Half way there!', :header => "#{remaining} minutes remaining"
-        elsif remaining == 5
-          notifier.notify 'Almost there!', :header => '5 minutes remaining'
-        end
-        sleep 60 unless ENV['POMO_ENV']=='test'
-        { :remaining => remaining }
-      end
+      ) { |remaining| notify_of_time_periods(remaining)}
+
 
       notifier.notify "Hope you are finished #{self}", :header => 'Time is up!', :type => :warning
 
@@ -178,5 +171,15 @@ module Pomo
       Process.detach(pid)
     end
 
+    private
+    def notify_of_time_periods(remaining)
+      if remaining == length / 2
+        notifier.notify 'Half way there!', :header => "#{remaining} minutes remaining"
+      elsif remaining == 5
+        notifier.notify 'Almost there!', :header => '5 minutes remaining'
+      end
+      sleep 60 unless ENV['POMO_ENV']=='test'
+      { :remaining => remaining }
+    end
   end
 end
