@@ -90,7 +90,7 @@ module Pomo
     private
 
     def foreground_progress(config)
-      notifier = Pomo::Notifier.new(config)
+      new_notifier(config)
 
       say "Started #{self}, you have #{length} minutes :)"
 
@@ -115,7 +115,7 @@ module Pomo
     end
 
     def background_progress(config)
-      notifier = Pomo::Notifier.new(config)
+      new_notifier(config)
 
       notifier.notify "Started #{self}", :header => "You have #{length} minutes"
 
@@ -197,6 +197,10 @@ module Pomo
       File.open(path, 'w') do |file|
         file.write tmux_time(time)
       end
+    end
+
+    def new_notifier(opts)
+      notifier = Pomo::Notifier.new(opts)
     end
   end
 end
