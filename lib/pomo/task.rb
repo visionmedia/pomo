@@ -147,14 +147,7 @@ module Pomo
     end
 
     def tmux_time(time)
-      case time
-      when 0
-        "#{time}:00"
-      when 1..5
-        "#[default]#[fg=red]#{time}:00#[default]"
-      when 6..100
-        "#[default]#[fg=green]#{time}:00#[default]"
-      end
+      set_tmux_time
     end
 
     def write_tmux_time(time)
@@ -180,6 +173,25 @@ module Pomo
       end
       sleep 60 unless ENV['POMO_ENV']=='test'
       { :remaining => remaining }
+    end
+
+    def if_task_running
+      if task = list.running
+        task.running = false
+        task.complete = true
+        list.save
+      end
+    end
+
+    def set_tmux_time
+      case time
+        when 0
+          "#{time}:00"
+        when 1..5
+          "#[default]#[fg=red]#{time}:00#[default]"
+        when 6..100
+          "#[default]#[fg=green]#{time}:00#[default]"
+        end
     end
   end
 end
