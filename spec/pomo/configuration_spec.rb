@@ -7,12 +7,14 @@ describe Pomo::Configuration do
       options = {
         :notifier => 'foo',
         :progress => 'bar',
-        :tmux     => 'baz'
+        :tmux     => 'baz',
+        :tomatos  => 25
       }
       config = Pomo::Configuration.new(options)
       expect(config.notifier).to eq 'foo'
       expect(config.progress).to eq 'bar'
       expect(config.tmux).to eq 'baz'
+      expect(config.tomatos).to eq 25
     end
   end
 
@@ -23,6 +25,7 @@ describe Pomo::Configuration do
         expect(config.notifier).to eq Pomo::Configuration.default_notifier
         expect(config.progress).to be false
         expect(config.tmux).to be false
+        expect(config.tomatos).to be 25
       end
 
       it 'writes a configuration file with default options' do
@@ -37,7 +40,8 @@ describe Pomo::Configuration do
         opts = {
           :notifier => 'foo',
           :progress => 'bar',
-          :tmux     => 'baz'
+          :tmux     => 'baz',
+          :tomatos  => 45
         }
         File.open(Pomo::Configuration.config_file, 'w') do |file|
           YAML::dump(opts, file)
@@ -49,6 +53,7 @@ describe Pomo::Configuration do
         expect(config.notifier).to eq 'foo'
         expect(config.progress).to eq 'bar'
         expect(config.tmux).to eq 'baz'
+        expect(config.tomatos).to eq 45
       end
 
       context 'given options' do
@@ -56,12 +61,14 @@ describe Pomo::Configuration do
           options = {
             :notifier => 'goo',
             :progress => 'car',
-            :tmux     => 'caz'
+            :tmux     => 'caz',
+            :tomatos  => 45
           }
           config = Pomo::Configuration.load(options)
           expect(config.notifier).to eq 'goo'
           expect(config.progress).to eq 'car'
           expect(config.tmux).to eq 'caz'
+          expect(config.tomatos).to eq 45
         end
       end
 
@@ -69,7 +76,7 @@ describe Pomo::Configuration do
   end
 
   describe '.save' do
-    let(:options) { {:notifier => 'foo', :progress => 'bar', :tmux => 'baz'} }
+    let(:options) { {:notifier => 'foo', :progress => 'bar', :tmux => 'baz', :tomatos => 45} }
 
     context 'not given a configuration file' do
       it 'writes a configuration file with options' do
@@ -84,7 +91,8 @@ describe Pomo::Configuration do
         opts = {
           :notifier => 'goo',
           :progress => 'car',
-          :tmux     => 'caz'
+          :tmux     => 'caz',
+          :tomatos  => 45
         }
         File.open(Pomo::Configuration.config_file, 'w') do |file|
           YAML::dump(opts, file)

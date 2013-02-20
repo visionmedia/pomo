@@ -26,19 +26,27 @@ module Pomo
     attr_accessor :tmux
 
     ##
+    # set tomato default time
+    #
+    # default values: 25 minutes
+
+    attr_accessor :tomatos
+
+    ##
     # Initialize configuration.
 
     def initialize(options = {})
       @notifier = options[:notifier]
       @progress = options[:progress]
       @tmux     = options[:tmux]
+      @tomatos  = options[:tomatos]
     end
 
     ##
     # Load configuration file or default_options. Passed options take precedence.
 
     def self.load(options = {})
-      options.reject!{|k,v| ![:notifier, :progress, :tmux].include? k}
+      options.reject!{|k,v| ![:notifier, :progress, :tmux, :tomatos].include? k}
 
       if !(File.exists? config_file)
         File.open(config_file, 'w') { |file| YAML::dump(default_options, file) }
@@ -54,7 +62,7 @@ module Pomo
 
     def self.save(options = {})
       force_save = options.delete :force
-      options.reject!{|k,v| ![:notifier, :progress, :tmux].include? k}
+      options.reject!{|k,v| ![:notifier, :progress, :tmux, :tomatos].include? k}
 
       options = default_options.merge(options)
 
@@ -76,7 +84,8 @@ module Pomo
       {
         :notifier => default_notifier,
         :progress => false,
-        :tmux     => false
+        :tmux     => false,
+        :tomatos  => 25
       }
     end
 

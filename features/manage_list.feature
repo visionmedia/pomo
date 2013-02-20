@@ -34,6 +34,23 @@ Feature: Manage Pomodoro list
         0. Walk the dog                                       : 25 minutes
         1. Shave the yak                                      : 25 minutes
         2. Remember the milk                                  : 25 minutes
-                                                                75 minutes
+                                                  75 minutes and 0 tomatos
+
+    """
+
+  Scenario: List tasks
+    Given the following tasks:
+      | Remember the milk |
+      | Walk the dog      |
+      | Shave the yak     |
+    When I run `pomo add 'Process Email' -m 3`
+    And I run `pomo list`
+    Then the output from "pomo list" should contain exactly:
+    """
+        0. Remember the milk                                  : 25 minutes
+        1. Walk the dog                                       : 25 minutes
+        2. Shave the yak                                      : 25 minutes
+        3. Process Email                                      : 3 tomatos
+                                                  75 minutes and 3 tomatos
 
     """

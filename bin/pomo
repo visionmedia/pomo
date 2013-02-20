@@ -124,7 +124,7 @@ command :add do |c|
   c.option '-l', '--length minutes', Integer, 'Change the default length in minutes'
   c.action do |args, options|
     config = Pomo::Configuration.load
-    task = Pomo::Task.new(args.shift, options.__hash__)
+    task = Pomo::Task.new(args.shift, options.__hash__, config)
     list << task
     list.save
     say "  - Added #{task}"
@@ -314,6 +314,7 @@ command :list do |c|
 
     config = Pomo::Configuration.load
     total = 0
+    tomatos = 0
     list.tasks.each_with_index do |task, i|
       next if options.complete && !task.complete?
       next if options.incomplete && task.complete?
@@ -323,8 +324,9 @@ command :list do |c|
         say ' %s %2d. %-50s : %d minutes' % [task.complete? ? '✓' : ' ', i, task.to_s, task.length]
       end
       total += task.length
+      tomatos += task.tomatos.to_i
     end
-    say ' ' * 60 + '%d minutes' % total
+    say '%70s' % "#{total} minutes and #{tomatos} tomatos"
   end
 end
 alias_command :ls, :list
