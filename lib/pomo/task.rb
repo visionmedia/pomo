@@ -46,6 +46,16 @@ module Pomo
       @complete = false
     end
 
+    def tomatos=(tomatos)
+      @tomatos = tomatos
+      @length = 0
+    end
+
+    def length=(length)
+      @length = length
+      @tomatos = nil
+    end
+
     ##
     # Quoted task name.
 

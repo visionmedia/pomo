@@ -43,14 +43,13 @@ Feature: Manage Pomodoro list
       | Remember the milk |
       | Walk the dog      |
       | Shave the yak     |
-    When I run `pomo add 'Process Email' -m 3`
+    When I run `pomo edit 0 -m 3`
     And I run `pomo list`
     Then the output from "pomo list" should contain exactly:
     """
-        0. Remember the milk                                  : 25 minutes
+        0. Remember the milk                                  : 3 tomatos
         1. Walk the dog                                       : 25 minutes
         2. Shave the yak                                      : 25 minutes
-        3. Process Email                                      : 3 tomatos
-                                                  75 minutes and 3 tomatos
+                                                  50 minutes and 3 tomatos
 
     """
