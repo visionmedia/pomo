@@ -18,6 +18,21 @@ Feature: Manage Pomodoro task
 
     """
 
+  Scenario: Edit tasks
+    When I run `pomo add 'Remember the milk' -d '1 qt Almond milk' -l 60`
+    And I run `pomo edit first -n 'Remember the Almond milk' -d '1 qt' -m 2`
+    And I run `pomo show first`
+    Then the output from "pomo show first" should contain exactly:
+    """
+
+               name : Remember the Almond milk
+             length : 2 tomatos
+        description : 1 qt
+           complete : [ ]
+
+
+    """
+
   Scenario: Copy tasks
     When I run `pomo add 'Remember the milk'`
     And I run `pomo complete first`

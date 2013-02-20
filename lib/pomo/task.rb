@@ -14,6 +14,11 @@ module Pomo
     attr_accessor :length
 
     ##
+    # Tomatos.
+
+    attr_accessor :tomatos
+
+    ##
     # Verbose task description.
 
     attr_accessor :description
@@ -34,7 +39,8 @@ module Pomo
     def initialize(name = nil, options = {})
       @name = name or raise '<task> required'
       @description = options.delete :description
-      @length = options.fetch :length, 25
+      @tomatos = options.delete :tomatos
+      @length = @tomatos ? @tomatos * 25 : options.fetch(:length, 25)
       @running = false
       @complete = false
     end
@@ -65,7 +71,11 @@ module Pomo
 
     def verbose_output(format)
       say format % ['name', self]
-      say format % ['length', "#{length} minutes"]
+      if tomatos
+        say format % ['length', "#{tomatos} tomatos"]
+      else
+        say format % ['length', "#{length} minutes"]
+      end
       say format % ['description', description] if description and not description.empty?
       say format % ['complete', complete ? '[✓]' : '[ ]']
     end

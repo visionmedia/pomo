@@ -8,6 +8,11 @@ Feature: Manage Pomodoro list
     And I run `pomo list`
     Then the output from "pomo list" should contain "Remember the milk"
 
+  Scenario: Add tasks with tomatos
+    When I run `pomo add 'Remember the milk' -m 2`
+    And I run `pomo list`
+    Then the output from "pomo list" should contain "Remember the milk                                  : 2 tomatos"
+
   Scenario: Remove tasks
     Given the following tasks:
       | Remember the milk |

@@ -120,6 +120,7 @@ command :add do |c|
   c.example 'Add a task with 60 minute limit'      , 'pomo add "create executable" --length 60'
 
   c.option '-d', '--description string', 'Add verbose task description'
+  c.option '-m', '--tomatos tomatos', Integer, 'Change the default tomatos'
   c.option '-l', '--length minutes', Integer, 'Change the default length in minutes'
   c.action do |args, options|
     config = Pomo::Configuration.load
@@ -140,6 +141,7 @@ command :edit do |c|
 
   c.option '-n', '--name string', 'Change the task name'
   c.option '-d', '--description string', 'Change the task description'
+  c.option '-m', '--tomatos tomatos', Integer, 'Change the default tomatos'
   c.option '-l', '--length minutes', Integer, 'Change the task length'
   c.action do |args, options|
     config = Pomo::Configuration.load
@@ -315,7 +317,11 @@ command :list do |c|
     list.tasks.each_with_index do |task, i|
       next if options.complete && !task.complete?
       next if options.incomplete && task.complete?
-      say ' %s %2d. %-50s : %d minutes' % [task.complete? ? '✓' : ' ', i, task.to_s, task.length]
+      if task.tomatos
+        say ' %s %2d. %-50s : %d tomatos' % [task.complete? ? '✓' : ' ', i, task.to_s, task.tomatos]
+      else
+        say ' %s %2d. %-50s : %d minutes' % [task.complete? ? '✓' : ' ', i, task.to_s, task.length]
+      end
       total += task.length
     end
     say ' ' * 60 + '%d minutes' % total
