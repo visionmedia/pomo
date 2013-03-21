@@ -90,7 +90,7 @@ module Pomo
     private
 
     def foreground_progress(config)
-      notifier = Pomo::Notifier.new(config)
+      new_notifier(config)
 
       say "Started #{self}, you have #{length} minutes :)"
 
@@ -101,15 +101,8 @@ module Pomo
         :format => format_message,
         :tokens => { :remaining => length },
         :complete_message => complete_message
-      ) do |remaining|
-        if remaining == length / 2
-          notifier.notify 'Half way there!', :header => "#{remaining} minutes remaining"
-        elsif remaining == 5
-          notifier.notify 'Almost there!', :header => '5 minutes remaining'
-        end
-        sleep 60 unless ENV['POMO_ENV']=='test'
-        { :remaining => remaining }
-      end
+      ) { |remaining| notify_of_time_periods(remaining)}
+
 
       notifier.notify "Hope you are finished #{self}", :header => 'Time is up!', :type => :warning
 
@@ -122,7 +115,7 @@ module Pomo
     end
 
     def background_progress(config)
-      notifier = Pomo::Notifier.new(config)
+      new_notifier(config)
 
       notifier.notify "Started #{self}", :header => "You have #{length} minutes"
 
@@ -154,14 +147,7 @@ module Pomo
     end
 
     def tmux_time(time)
-      case time
-      when 0
-        "#{time}:00"
-      when 1..5
-        "#[default]#[fg=red]#{time}:00#[default]"
-      when 6..100
-        "#[default]#[fg=green]#{time}:00#[default]"
-      end
+      set_tmux_time
     end
 
     def write_tmux_time(time)
@@ -177,6 +163,44 @@ module Pomo
       end
       Process.detach(pid)
     end
+    
+    def notify_of_time_periods(remaining)
+      if remaining == length / 2
+        notifier.notify 'Half way there!', :header => "#{remaining} minutes remaining"
+      elsif remaining == 5
+        notifier.notify 'Almost there!', :header => '5 minutes remaining'
+      end
+      sleep 60 unless ENV['POMO_ENV']=='test'
+      { :remaining => remaining }
+    end
 
+    def if_task_running
+      if task = list.running
+        task.running = false
+        task.complete = true
+        list.save
+      end
+    end
+
+    def set_tmux_time
+      case time
+        when 0
+          "#{time}:00"
+        when 1..5
+          "#[default]#[fg=red]#{time}:00#[default]"
+        when 6..100
+          "#[default]#[fg=green]#{time}:00#[default]"
+        end
+    end
+
+    def write_pomodoro_stat
+      File.open(path, 'w') do |file|
+        file.write tmux_time(time)
+      end
+    end
+
+    def new_notifier(opts)
+      notifier = Pomo::Notifier.new(opts)
+    end
   end
 end
