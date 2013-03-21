@@ -5,7 +5,7 @@ module Pomo
     module_function
 
     def linux?
-      (/linux/ =~ RbConfig::CONFIG['host_os']) !=nil
+      (/linux/ =~ RbConfig::CONFIG['host_os']) != nil
     end
 
     def mac?
