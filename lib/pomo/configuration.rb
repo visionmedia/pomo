@@ -26,12 +26,20 @@ module Pomo
     attr_accessor :tmux
 
     ##
+    # Log to a Tracker.
+    #
+    # values: true | false
+
+    attr_accessor :tracker
+
+    ##
     # Initialize configuration.
 
     def initialize(options = {})
       @notifier = options[:notifier]
       @progress = options[:progress]
       @tmux     = options[:tmux]
+      @tracker  = options[:tracker]
     end
 
     ##
