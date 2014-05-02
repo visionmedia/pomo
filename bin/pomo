@@ -121,6 +121,8 @@ command :add do |c|
 
   c.option '-d', '--description string', 'Add verbose task description'
   c.option '-l', '--length minutes', Integer, 'Change the default length in minutes'
+  c.option '-p', '--project string', 'Harvest project name to log time against'
+  c.option '-t', '--type string', 'Harvest task type to log time for'
   c.action do |args, options|
     config = Pomo::Configuration.load
     task = Pomo::Task.new(args.shift, options.__hash__)

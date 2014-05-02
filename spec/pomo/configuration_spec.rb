@@ -35,9 +35,14 @@ describe Pomo::Configuration do
     context 'given a configuration file' do
       before(:each) do
         opts = {
-          :notifier => 'foo',
-          :progress => 'bar',
-          :tmux     => 'baz'
+          notifier: 'foo',
+          progress: 'bar',
+          tmux:     'baz',
+          tracker:  {
+            domain:   'domain',
+            password: 'password',
+            username: 'user@email.com'
+          }
         }
         File.open(Pomo::Configuration.config_file, 'w') do |file|
           YAML::dump(opts, file)
@@ -49,6 +54,12 @@ describe Pomo::Configuration do
         expect(config.notifier).to eq 'foo'
         expect(config.progress).to eq 'bar'
         expect(config.tmux).to eq 'baz'
+        expect(config.tracker).to eq({
+          domain: 'domain',
+          password: 'password',
+          username: 'user@email.com'
+        })
+
       end
 
       context 'given options' do

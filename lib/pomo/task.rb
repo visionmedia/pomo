@@ -35,6 +35,8 @@ module Pomo
       @name = name or raise '<task> required'
       @description = options.delete :description
       @length = options.fetch :length, 25
+      @project = options.delete :project
+      @type = options.delete :type
       @running = false
       @complete = false
     end
@@ -77,6 +79,8 @@ module Pomo
       list = options[:list]
       progress = options[:progress]
 
+      time_entry.test_config(config.tracker) if log_time_entry?
+
       @running = true
       list.save unless list.nil?
 
@@ -112,6 +116,7 @@ module Pomo
       end
 
       notifier.notify "Hope you are finished #{self}", :header => 'Time is up!', :type => :warning
+      log_time_entry(config.tracker)
 
       list = Pomo::List.new
       if task = list.running
@@ -141,6 +146,7 @@ module Pomo
         write_tmux_time(0) if config.tmux
         refresh_tmux_status_bar if config.tmux
         notifier.notify "Hope you are finished #{self}", :header => 'Time is up!', :type => :warning
+        log_time_entry(config)
 
         list = Pomo::List.new
         if task = list.running
@@ -162,6 +168,25 @@ module Pomo
       when 6..100
         "#[default]#[fg=green]#{time}:00#[default]"
       end
+    end
+
+    def log_time_entry?
+      @project && @type
+    end
+
+    def time_entry
+      options = {
+        name: @name,
+        description: @description,
+        minutes: @length,
+        project: @project,
+        task: @type
+      }
+      @time_entry ||= TimeEntry.new(options)
+    end
+
+    def log_time_entry(config)
+      time_entry.log(config) if log_time_entry?
     end
 
     def write_tmux_time(time)
