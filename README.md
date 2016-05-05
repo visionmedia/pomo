@@ -1,4 +1,4 @@
-# Pomo [![Build Status](https://travis-ci.org/visionmedia/pomo.png?branch=master)](https://travis-ci.org/visionmedia/pomo) [![Dependency Status](https://gemnasium.com/visionmedia/pomo.png)](https://gemnasium.com/visionmedia/pomo) [![Code Climate](https://codeclimate.com/github/visionmedia/pomo.png)](https://codeclimate.com/github/visionmedia/pomo)
+# Pomo [![Build Status](https://travis-ci.org/tj/pomo.png?branch=master)](https://travis-ci.org/tj/pomo) [![Dependency Status](https://gemnasium.com/tj/pomo.png)](https://gemnasium.com/tj/pomo) [![Code Climate](https://codeclimate.com/github/tj/pomo.png)](https://codeclimate.com/github/tj/pomo)
 
 Command-line application for the [Pomodoro](http://www.pomodorotechnique.com/)
 time management technique, with notification and tmux status bar support.
@@ -198,7 +198,7 @@ and blue during a break e.g.
 ## Contributing
 
 We :heart: pull requests and feedback. Feel free to
-[submit a ticket](https://github.com/visionmedia/pomo/issues) or see
+[submit a ticket](https://github.com/tj/pomo/issues) or see
 [CONTRIBUTING](CONTRIBUTING.md)
 for details on pull requests.
 
